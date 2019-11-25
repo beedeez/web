@@ -51,8 +51,17 @@ function getHistory(history) {
   return history || createBrowserHistory();
 }
 
+let history;
+
+
+const getHistory = () => {
+	return history;
+};
+
+export { getHistory };
+
 export default function createBrowserApp(App, { history: historyOption } = {}) {
-  const history = getHistory(historyOption);
+  history = getHistory(historyOption);
   let currentPathAndParams = getPathAndParamsFromLocation(history.location);
   const initAction =
     App.router.getActionForPathAndParams(
