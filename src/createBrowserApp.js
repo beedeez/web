@@ -54,11 +54,11 @@ function getHistory(history) {
 let history;
 
 
-const getHistory = () => {
+const getHistoryInstance = () => {
 	return history;
 };
 
-export { getHistory };
+export { getHistoryInstance };
 
 export default function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
