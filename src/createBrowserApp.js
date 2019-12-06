@@ -100,13 +100,12 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
           lastState: null,
         })
       );
-    }
-    componentDidUpdate() {
-      this.updateTitle();
-
       exportedGetNavigation = () => {
         return this._navigation;
       };
+    }
+    componentDidUpdate() {
+      this.updateTitle();
     }
     updateTitle() {
       const { state } = this._navigation;
