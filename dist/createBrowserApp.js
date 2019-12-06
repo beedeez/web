@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getHistoryInstance = undefined;
+exports.exportedGetNavigation = exports.getCurrentHistory = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /* eslint-env browser */
 
@@ -16,8 +16,6 @@ var _react = require('react');
 var _react2 = _interopRequireDefault(_react);
 
 var _core = require('@react-navigation/core');
-
-var _reactNativeSafeAreaContext = require('react-native-safe-area-context');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57,12 +55,12 @@ function getHistory(history) {
 }
 
 let history;
-
-const getHistoryInstance = () => {
+const getCurrentHistory = exports.getCurrentHistory = () => {
   return history;
 };
 
-exports.getHistoryInstance = getHistoryInstance;
+let exportedGetNavigation = exports.exportedGetNavigation = undefined;
+
 function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
   let currentPathAndParams = getPathAndParamsFromLocation(history.location);
@@ -125,6 +123,10 @@ function createBrowserApp(App, { history: historyOption } = {}) {
     }
     componentDidUpdate() {
       this.updateTitle();
+
+      exports.exportedGetNavigation = exportedGetNavigation = () => {
+        return this._navigation;
+      };
     }
     updateTitle() {
       const { state } = this._navigation;
@@ -146,13 +148,9 @@ function createBrowserApp(App, { history: historyOption } = {}) {
     render() {
       this._navigation = (0, _core.getNavigation)(App.router, this.state.nav, this.dispatch, this._actionEventSubscribers, () => this.props.screenProps, () => this._navigation);
       return _react2.default.createElement(
-        _reactNativeSafeAreaContext.SafeAreaProvider,
-        null,
-        _react2.default.createElement(
-          _core.NavigationProvider,
-          { value: this._navigation },
-          _react2.default.createElement(App, _extends({}, this.props, { navigation: this._navigation }))
-        )
+        _core.NavigationProvider,
+        { value: this._navigation },
+        _react2.default.createElement(App, _extends({}, this.props, { navigation: this._navigation }))
       );
     }
   }

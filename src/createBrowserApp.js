@@ -11,7 +11,6 @@ import {
   getNavigation,
   NavigationProvider,
 } from '@react-navigation/core';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 /* eslint-disable import/no-commonjs */
 const queryString = require('query-string');
@@ -52,13 +51,11 @@ function getHistory(history) {
 }
 
 let history;
-
-
-const getHistoryInstance = () => {
-	return history;
+export const getCurrentHistory = () => {
+  return history;
 };
 
-export { getHistoryInstance };
+export let exportedGetNavigation;
 
 export default function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
@@ -106,6 +103,10 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
     }
     componentDidUpdate() {
       this.updateTitle();
+
+      exportedGetNavigation = () => {
+        return this._navigation;
+      };
     }
     updateTitle() {
       const { state } = this._navigation;
@@ -134,11 +135,9 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
         () => this._navigation
       );
       return (
-        <SafeAreaProvider>
-          <NavigationProvider value={this._navigation}>
-            <App {...this.props} navigation={this._navigation} />
-          </NavigationProvider>
-        </SafeAreaProvider>
+        <NavigationProvider value={this._navigation}>
+          <App {...this.props} navigation={this._navigation} />
+        </NavigationProvider>
       );
     }
     dispatch = action => {
