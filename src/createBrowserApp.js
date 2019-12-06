@@ -60,6 +60,18 @@ export let exportedGetNavigation;
 export default function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
   let currentPathAndParams = getPathAndParamsFromLocation(history.location);
+
+  console.log('Call getActionForPathAndParams');
+  console.log(currentPathAndParams.path);
+  console.log(currentPathAndParams.params);
+  console.log('Call getActionForPathAndParams');
+  console.log(
+    App.router.getActionForPathAndParams(
+      currentPathAndParams.path,
+      currentPathAndParams.params
+    )
+  );
+
   const initAction =
     App.router.getActionForPathAndParams(
       currentPathAndParams.path,
