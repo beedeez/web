@@ -65,12 +65,6 @@ function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
   let currentPathAndParams = getPathAndParamsFromLocation(history.location);
 
-  console.log('Call getActionForPathAndParams');
-  console.log(currentPathAndParams.path);
-  console.log(currentPathAndParams.params);
-  console.log('Call getActionForPathAndParams');
-  console.log(App.router.getActionForPathAndParams(currentPathAndParams.path, currentPathAndParams.params));
-
   const initAction = App.router.getActionForPathAndParams(currentPathAndParams.path, currentPathAndParams.params) || _core.NavigationActions.init();
 
   const setHistoryListener = dispatch => {
@@ -96,6 +90,7 @@ function createBrowserApp(App, { history: historyOption } = {}) {
       return _temp = super(...args), this.state = { nav: App.router.getStateForAction(initAction) }, this._title = document.title, this._actionEventSubscribers = new Set(), this.dispatch = action => {
         const lastState = this.state.nav;
         const newState = App.router.getStateForAction(action, lastState);
+        const getOwnerMemberId = this.props.screenProps.getOwnerMemberId;
         const dispatchEvents = () => this._actionEventSubscribers.forEach(subscriber => subscriber({
           type: 'action',
           action,
@@ -110,7 +105,11 @@ function createBrowserApp(App, { history: historyOption } = {}) {
           const pathAndParams = App.router.getPathAndParamsForState && App.router.getPathAndParamsForState(newState);
           if (pathAndParams && !matchPathAndParams(pathAndParams, currentPathAndParams)) {
             currentPathAndParams = pathAndParams;
-            history.push(`/${pathAndParams.path}?${queryString.stringify(pathAndParams.params)}`);
+            const params = _extends({}, pathAndParams.params);
+            if (getOwnerMemberId && getOwnerMemberId()) {
+              params.userId = getOwnerMemberId();
+            }
+            history.push(`/${pathAndParams.path}?${queryString.stringify(params)}`);
           }
         } else {
           dispatchEvents();

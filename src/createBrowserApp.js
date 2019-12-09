@@ -143,6 +143,7 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
     dispatch = action => {
       const lastState = this.state.nav;
       const newState = App.router.getStateForAction(action, lastState);
+      const getOwnerMemberId = this.props.screenProps.getOwnerMemberId;
       const dispatchEvents = () =>
         this._actionEventSubscribers.forEach(subscriber =>
           subscriber({
@@ -168,8 +169,8 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
           const params = {
             ...pathAndParams.params,
           };
-          if (this.getScreenProps()._ownerMemberId) {
-            params.userId = this.getScreenProps()._ownerMemberId;
+          if (getOwnerMemberId && getOwnerMemberId()) {
+            params.userId = getOwnerMemberId();
           }
           history.push(
             `/${pathAndParams.path}?${queryString.stringify(params)}`
