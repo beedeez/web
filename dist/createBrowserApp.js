@@ -64,6 +64,13 @@ let exportedGetNavigation = exports.exportedGetNavigation = undefined;
 function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
   let currentPathAndParams = getPathAndParamsFromLocation(history.location);
+
+  console.log('Call getActionForPathAndParams');
+  console.log(currentPathAndParams.path);
+  console.log(currentPathAndParams.params);
+  console.log('Call getActionForPathAndParams');
+  console.log(App.router.getActionForPathAndParams(currentPathAndParams.path, currentPathAndParams.params));
+
   const initAction = App.router.getActionForPathAndParams(currentPathAndParams.path, currentPathAndParams.params) || _core.NavigationActions.init();
 
   const setHistoryListener = dispatch => {
@@ -120,13 +127,12 @@ function createBrowserApp(App, { history: historyOption } = {}) {
         state: this.state.nav,
         lastState: null
       }));
-    }
-    componentDidUpdate() {
-      this.updateTitle();
-
       exports.exportedGetNavigation = exportedGetNavigation = () => {
         return this._navigation;
       };
+    }
+    componentDidUpdate() {
+      this.updateTitle();
     }
     updateTitle() {
       const { state } = this._navigation;

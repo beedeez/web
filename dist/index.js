@@ -18,6 +18,12 @@ Object.defineProperty(exports, 'getHistoryInstance', {
     return _createBrowserApp.getHistoryInstance;
   }
 });
+Object.defineProperty(exports, 'exportedGetNavigation', {
+  enumerable: true,
+  get: function () {
+    return _createBrowserApp.exportedGetNavigation;
+  }
+});
 
 var _handleServerRequest = require('./handleServerRequest');
 
