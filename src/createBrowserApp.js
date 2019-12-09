@@ -61,17 +61,6 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
   history = getHistory(historyOption);
   let currentPathAndParams = getPathAndParamsFromLocation(history.location);
 
-  console.log('Call getActionForPathAndParams');
-  console.log(currentPathAndParams.path);
-  console.log(currentPathAndParams.params);
-  console.log('Call getActionForPathAndParams');
-  console.log(
-    App.router.getActionForPathAndParams(
-      currentPathAndParams.path,
-      currentPathAndParams.params
-    )
-  );
-
   const initAction =
     App.router.getActionForPathAndParams(
       currentPathAndParams.path,
@@ -176,10 +165,14 @@ export default function createBrowserApp(App, { history: historyOption } = {}) {
           !matchPathAndParams(pathAndParams, currentPathAndParams)
         ) {
           currentPathAndParams = pathAndParams;
+          const params = {
+            ...pathAndParams.params,
+          };
+          if (this.getScreenProps()._ownerMemberId) {
+            params.userId = this.getScreenProps()._ownerMemberId;
+          }
           history.push(
-            `/${pathAndParams.path}?${queryString.stringify(
-              pathAndParams.params
-            )}`
+            `/${pathAndParams.path}?${queryString.stringify(params)}`
           );
         }
       } else {
